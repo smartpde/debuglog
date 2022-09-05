@@ -49,12 +49,12 @@ Note that all debug loggers must be created using the `dlog` shim module:
 -- Enable logging by running ":DebugLogEnable *" command first.
 
 local dlog = require("dlog")
-local logger1 = dlog("logger1")
-local logger2 = dlog("logger2")
+local logger1 = dlog("some_logger")
+local logger2 = dlog("another_logger")
 
-logger1("This is from %s", "logger1")
-logger1("This is also from %s", "logger1")
-logger2("And this is from %s", "logger2")
+logger1("This is from %s", "some_logger")
+logger1("This is also from %s", "some_logger")
+logger2("And this is from %s", "another_logger")
 ```
 
 You can create many named loggers, the logger name will be attached to all its

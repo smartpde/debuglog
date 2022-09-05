@@ -99,9 +99,9 @@ local Options = {}
 ---@param opts Options configuration options, optional
 M.setup = function(opts)
   vim.cmd(
-    [[comm! -nargs=1 DebugLogInstallShim :lua require("debuglog").install_shim(<args>)]])
+    [[comm! -nargs=1 DebugLogInstallShim :lua require("debuglog").install_shim(<f-args>)]])
   vim.cmd(
-    [[comm! -nargs=1 DebugLogEnable :lua require("debuglog").enable(<args>)]])
+    [[comm! -nargs=1 DebugLogEnable :lua require("debuglog").enable(<f-args>)]])
   vim.cmd([[comm! DebugLogDisable :lua require("debuglog").disable()]])
   vim.cmd(
     [[comm! DebugLogEnableFileLogging :lua require("debuglog").set_config({log_to_file = true})]])
@@ -186,7 +186,7 @@ M.install_shim = function(dir)
   if os.execute(cmd) ~= 0 then
     error("Could not copy the shim. Command used: " .. cmd)
   end
-  vim.notify("Shim installed at " .. dest)
+  vim.notify("Shim installed in " .. dest)
 end
 
 ---Do not use directly, this function should be called only from the shim
