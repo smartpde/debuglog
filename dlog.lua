@@ -1,4 +1,5 @@
 ---dlog is a module for writing debug logs.
+---
 ---WARNING: This file is auto-generated, DO NOT MODIFY.
 ---
 ---Example usage:
@@ -11,7 +12,7 @@
 ---Read more at https://github.com/smartpde/debug-log#shim
 local has_debuglog, debuglog = pcall(require, "debuglog")
 
-local function noop()
+local function noop(_)
 end
 
 if has_debuglog then

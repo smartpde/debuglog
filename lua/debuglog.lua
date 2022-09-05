@@ -1,8 +1,17 @@
+-- Map of loggers by name.
 local loggers = {}
+-- Map of active loggers' options by name.
 local loggers_opts = {}
-local global_opts = {log_to_console = true, log_to_file = false}
+local global_opts = {
+  log_to_console = true,
+  log_to_file = false,
+  time_hl_group = "Comment"
+}
+-- Set of currently enabled loggers.
 local enabled_loggers = {}
+-- Means that * was specifed in the enabled logs spec.
 local all_enabled = false
+-- The log file path for the file logger.
 local outfile
 
 local colors = {
@@ -17,8 +26,10 @@ local colors = {
   "#FF33CC", "#FF33FF", "#FF6600", "#FF6633", "#FF9900", "#FF9933", "#FFCC00",
   "#FFCC33"
 }
+-- Set of auto-generated highlight groups for colored log output.
 local hl_groups = {}
 
+---Any simple hash function to make colors stick to loggers.
 local function simple_hash(s)
   local hash = 5381
   for i = 1, #s do
@@ -35,7 +46,8 @@ local function make_logger(name, hl, opts)
     if global_opts.log_to_console then
       local message = string.format(...)
       vim.api.nvim_echo({
-        {os.date("%H:%M:%S:"), "Comment"}, {" "}, {name, hl}, {": "}, {message}
+        {os.date("%H:%M:%S:"), global_opts.time_hl_group}, {" "}, {name, hl},
+        {": "}, {message}
       }, true, {})
     end
     if global_opts.log_to_file then
@@ -89,6 +101,12 @@ M.setup = function(opts)
   vim.cmd(
     [[comm! -nargs=1 DebugLogEnable :lua require("debuglog").enable(<args>)]])
   vim.cmd([[comm! DebugLogDisable :lua require("debuglog").disable()]])
+  vim.cmd(
+    [[comm! DebugLogEnableFileLogging :lua require("debuglog").set_config({log_to_file = true})]])
+  vim.cmd(
+    [[comm! DebugLogDisableFileLogging :lua require("debuglog").set_config({log_to_file = false})]])
+  vim.cmd(
+    [[comm! DebugLogOpenFileLog :lua vim.cmd("e ".. require("debuglog").log_file_path())]])
   outfile = string.format("%s/debug.log",
               vim.api.nvim_call_function("stdpath", {"data"}))
   M.set_config(opts)
@@ -101,11 +119,14 @@ M.set_config = function(opts)
   for k, v in pairs(opts) do
     global_opts[k] = v
   end
+  if opts.log_to_file then
+    vim.notify("Logging to file " .. outfile)
+  end
 end
 
 ---Returns the path to the debug log file.
 ---@return string log file path
-M.outfile = function()
+M.log_file_path = function()
   return outfile
 end
 
