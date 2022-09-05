@@ -1,0 +1,116 @@
+*debuglog* for Neovim plugin developers.
+
+debuglog is made for Neovim plugin developers to debug the plugin locally, or
+collect debugging info from users.
+
+With debuglog, you leave the debug statements in the code. By default, nothing
+is logged, but you can enable the loggers selectively.
+
+The users of your plugin do _not_ need the debuglog to be installed. All logging
+is done through the tiny |debuglog-shim| file that you include in your plugin.
+Without the full debuglog module, everything is a no-op.
+
+==============================================================================
+CONTENTS                                                    *debuglog-contents*
+
+Shim                                                             |debuglog-shim|
+Writing debug statements                                        |debuglog-write|
+User commands                                                |debuglog-commands|
+Lua API                                                           |debuglog-lua|
+
+==============================================================================
+Shim                                                             *debuglog-shim*
+
+debuglog is an optional dependency of your plugin, therefore you must install the tiny
+shim file dlog.lua into your
+plugin's directory. The shim checks if the full debuglog module is present, and turns
+all logging into a no-op otherwise.
+
+There is a simple command to copy the shim file for you:
+
+>
+  :DebugLogInstallShim <path to plugin_dir/lua>
+
+  For example:
+  :DebugLogInstallShim ~/projects/my_awesome_plugin/lua
+<
+
+You can of course copy the file any other way.
+
+==============================================================================
+Writing debug statements                                        *debuglog-write*
+
+Note that all debug loggers must be created using the dlog shim module:
+
+>
+  -- Enable logging by running ":DebugLogEnable *" command first.
+
+  local dlog = require("dlog")
+  local logger1 = dlog("logger1")
+  local logger2 = dlog("logger2")
+
+  logger1("This is from %s", "logger1")
+  logger1("This is also from %s", "logger1")
+  logger2("And this is from %s", "logger2")
+<
+
+You can create many named loggers, the logger name will be attached to all its
+messages. Additionally, log statements in the vim `:messages` will be nicely
+colored for easier identification:
+
+The loggers use standard Lua's string.format().
+
+==============================================================================
+User commands                                                *debuglog-commands*
+
+- :DebugLogInstallShim <dir_path>
+  Installs the |debuglog-shim| module into the specified directory.
+
+- :DebugLogEnable <logspec>
+  Enables the specified loggers. logspec could be * to enable all loggers, or
+  a comma-separated list of logger names, e.g. logger1,logger2
+
+- :DebugLogDisable
+  Disables all loggers.
+
+- :DebugLogEnableFileLogging
+  Enables logging to a file. The file path will be printed out.
+
+- :DebugLogDisableFileLogging
+  Disables logging to a file.
+
+- :DebugLogOpenFileLog
+  Opens the debug log file in the current split.
+
+==============================================================================
+Lua API                                                           *debuglog-lua*
+
+debuglog provides the following Lua API:
+
+>
+local debuglog = require("debuglog")
+
+-- Sets up the plugin, with default options.
+debuglog.setup({
+  log_to_console = true,
+  log_to_file = false,
+  -- The highlight group for printing the time column in console
+  time_hl_group = "Comment",
+})
+
+-- The same options as in the setup() function can be changed with set_config().
+debuglog.set_config(opts)
+
+-- Enables all loggers.
+debuglog.enable("*")
+
+-- Enables specified loggers.
+debuglog.enable("logger1, logger2")
+
+-- Disable all loggers.
+debuglog.disable()
+
+-- Returns the file path with debug logs.
+debuglog.log_file_path()
+
+<

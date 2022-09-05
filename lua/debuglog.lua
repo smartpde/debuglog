@@ -99,6 +99,8 @@ local Options = {}
 ---@param opts Options configuration options, optional
 M.setup = function(opts)
   vim.cmd(
+    [[comm! -nargs=1 DebugLogInstallShim :lua require("debuglog").install_shim(<args>)]])
+  vim.cmd(
     [[comm! -nargs=1 DebugLogEnable :lua require("debuglog").enable(<args>)]])
   vim.cmd([[comm! DebugLogDisable :lua require("debuglog").disable()]])
   vim.cmd(

@@ -1,21 +1,21 @@
-# debug-log for Neovim plugin developers
+# debuglog for Neovim plugin developers
 
-`debug-log` is made for Neovim plugin developers to debug the plugin locally, or collect
-debugging info from plugin users.
+`debuglog` is made for Neovim plugin developers to debug the plugin locally, or collect
+debugging info from users.
 
-With `debug-log`, you leave the debug statements in the code. By default, nothing is logged,
+With `debuglog`, you leave the debug statements in the code. By default, nothing is logged,
 but you can enable the loggers selectively.
 
-The users of your plugin do _not_ need the `debug-log` to be installed. All logging is done
-through the tiny [shim](#shim) file that you include in your plugin, so without the full
-`debug-log` module, everything is a no-op.
+The users of your plugin do _not_ need the `debuglog` to be installed. All logging is done
+through the tiny [shim](#shim) file that you include in your plugin. Without the full
+`debuglog` module, everything is a no-op.
 
 ## Installation
 
 To install the plugin with [packer.nvim](https://github.com/wbthomason/packer.nvim):
 
 ```lua
-use {"smartpde/debug-log"}
+use {"smartpde/debuglog"}
 ```
 
 Once installed, call the `setup()` function to register various commands:
@@ -25,9 +25,9 @@ require("debuglog").setup()
 
 ## Shim
 
-`debug-log` is an optional dependency of your plugin, therefore you must install the tiny
-shim file [dlog.lua](https://github.com/smartpde/debug-log/blob/main/dlog.lua) into your
-plugin's directory. The shim checks if the full `debug-log` module is present, and turns
+`debuglog` is an optional dependency of your plugin, therefore you must install the tiny
+shim file [dlog.lua](https://github.com/smartpde/debuglog/blob/main/dlog.lua) into your
+plugin's directory. The shim checks if the full `debuglog` module is present, and turns
 all logging into a no-op otherwise.
 
 There is a simple command to copy the shim file for you:
