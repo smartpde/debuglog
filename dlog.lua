@@ -8,8 +8,8 @@
 ---
 ---This will print "Formatted lua string test, number 42, etc"
 ---
----If debug-log plugin is not installed, all logs are no-op.
----Read more at https://github.com/smartpde/debug-log#shim
+---If debuglog plugin is not installed, all logs are no-op.
+---Read more at https://github.com/smartpde/debuglog#shim
 local has_debuglog, debuglog = pcall(require, "debuglog")
 
 local function noop(_)
