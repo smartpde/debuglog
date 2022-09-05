@@ -21,10 +21,9 @@ Lua API                                                           |debuglog-lua|
 ==============================================================================
 Shim                                                             *debuglog-shim*
 
-debuglog is an optional dependency of your plugin, therefore you must install the tiny
-shim file dlog.lua into your
-plugin's directory. The shim checks if the full debuglog module is present, and turns
-all logging into a no-op otherwise.
+debuglog is an optional dependency of your plugin, therefore you must install
+the tiny shim file dlog.lua into your plugin's directory. The shim checks if the
+full debuglog module is present, and turns all logging into a no-op otherwise.
 
 There is a simple command to copy the shim file for you:
 
@@ -88,29 +87,28 @@ Lua API                                                           *debuglog-lua*
 debuglog provides the following Lua API:
 
 >
-local debuglog = require("debuglog")
+  local debuglog = require("debuglog")
 
--- Sets up the plugin, with default options.
-debuglog.setup({
-  log_to_console = true,
-  log_to_file = false,
-  -- The highlight group for printing the time column in console
-  time_hl_group = "Comment",
-})
+  -- Sets up the plugin, with default options.
+  debuglog.setup({
+    log_to_console = true,
+    log_to_file = false,
+    -- The highlight group for printing the time column in console
+    time_hl_group = "Comment",
+  })
 
--- The same options as in the setup() function can be changed with set_config().
-debuglog.set_config(opts)
+  -- The same options as in the setup() function can be changed with set_config().
+  debuglog.set_config(opts)
 
--- Enables all loggers.
-debuglog.enable("*")
+  -- Enables all loggers.
+  debuglog.enable("*")
 
--- Enables specified loggers.
-debuglog.enable("logger1, logger2")
+  -- Enables specified loggers.
+  debuglog.enable("logger1, logger2")
 
--- Disable all loggers.
-debuglog.disable()
+  -- Disable all loggers.
+  debuglog.disable()
 
--- Returns the file path with debug logs.
-debuglog.log_file_path()
-
+  -- Returns the file path with debug logs.
+  debuglog.log_file_path()
 <
