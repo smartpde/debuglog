@@ -46,8 +46,8 @@ local function make_logger(name, hl, opts)
     if global_opts.log_to_console then
       local message = string.format(...)
       vim.api.nvim_echo({
-        {os.date("%H:%M:%S:"), global_opts.time_hl_group}, {" "}, {name, hl},
-        {": "}, {message}
+        { os.date("%H:%M:%S:"), global_opts.time_hl_group }, { " " }, { name, hl },
+        { ": " }, { message }
       }, true, {})
     end
     if global_opts.log_to_file then
@@ -97,7 +97,7 @@ local Options = {}
 
 ---Configures the plugin, registers user commands, etc.
 ---@param opts Options configuration options, optional
-M.setup = function(opts)
+function M.setup(opts)
   vim.cmd(
     [[comm! -nargs=1 DebugLogInstallShim :lua require("debuglog").install_shim(<f-args>)]])
   vim.cmd(
@@ -110,13 +110,13 @@ M.setup = function(opts)
   vim.cmd(
     [[comm! DebugLogOpenFileLog :lua vim.cmd("e ".. require("debuglog").log_file_path())]])
   outfile = string.format("%s/debug.log",
-              vim.api.nvim_call_function("stdpath", {"data"}))
+    vim.api.nvim_call_function("stdpath", { "data" }))
   M.set_config(opts)
 end
 
 ---Updates plugin configuration, for example to change the logging destinations.
 ---@param opts Options configurationt options
-M.set_config = function(opts)
+function M.set_config(opts)
   opts = opts or {}
   for k, v in pairs(opts) do
     global_opts[k] = v
@@ -128,13 +128,13 @@ end
 
 ---Returns the path to the debug log file.
 ---@return string log file path
-M.log_file_path = function()
+function M.log_file_path()
   return outfile
 end
 
 ---Enables the specified loggers. Note that previously enabled loggers will be disabled.
 ---@param spec string the log specification, comma-separated list of loggers to enable, or * to enable all loggers
-M.enable = function(spec)
+function M.enable(spec)
   spec = spec or ""
   M.disable()
   local split = vim.split(spec, ",")
@@ -155,7 +155,7 @@ M.enable = function(spec)
 end
 
 ---Disables all loggers
-M.disable = function()
+function M.disable()
   all_enabled = false
   for _, opts in pairs(loggers_opts) do
     opts.enabled = false
@@ -165,12 +165,12 @@ end
 
 ---Installs the dlog.lua shim to the specified directory
 ---@param dir string the destination directory
-M.install_shim = function(dir)
+function M.install_shim(dir)
   assert(dir and dir ~= "", "dir must be specified")
 
   local current_path = script_path()
   local current_dir = current_path:gsub(path_sep() .. "([^" .. path_sep() ..
-                                          "]+)$", function()
+  "]+)$", function()
     return ""
   end)
   local shim_path = current_dir .. "/../dlog.lua"
@@ -190,12 +190,12 @@ M.install_shim = function(dir)
 end
 
 ---Do not use directly, this function should be called only from the shim
-M.logger_for_shim_only = function(name)
+function M.logger_for_shim_only(name)
   local logger = loggers[name]
   if logger then
     return logger
   end
-  local opts = {enabled = all_enabled or enabled_loggers[name]}
+  local opts = { enabled = all_enabled or enabled_loggers[name] }
   local hash = simple_hash(name)
   local color_index = (math.abs(hash) % #colors) + 1
   local hl = "DebugLog" .. color_index
@@ -207,6 +207,13 @@ M.logger_for_shim_only = function(name)
   loggers[name] = logger
   loggers_opts[name] = opts
   return logger
+end
+
+---Checks if the logger is enabled.
+---@param logger_name string the name of the logger
+---@return boolean enabled whether the logger is enabled
+function M.is_enabled(logger_name)
+  return enabled_loggers[logger_name] or false
 end
 
 return M

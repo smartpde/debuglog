@@ -45,12 +45,18 @@ Note that all debug loggers must be created using the dlog shim module:
   -- Enable logging by running ":DebugLogEnable *" command first.
 
   local dlog = require("dlog")
-  local logger1 = dlog("logger1")
-  local logger2 = dlog("logger2")
+  local logger1 = dlog.logger("logger1")
+  local logger2 = dlog.logger("logger2")
 
   logger1("This is from %s", "logger1")
   logger1("This is also from %s", "logger1")
   logger2("And this is from %s", "logger2")
+
+  -- you can also check if the logger is enabled if the value to print
+  -- is expensive to get
+  if dlog.is_enabled("logger1") then
+    logger1("Print some heavy string: %s", "heavy string")
+  end
 <
 
 You can create many named loggers, the logger name will be attached to all its

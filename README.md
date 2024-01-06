@@ -55,6 +55,12 @@ local logger2 = dlog("another_logger")
 logger1("This is from %s", "some_logger")
 logger1("This is also from %s", "some_logger")
 logger2("And this is from %s", "another_logger")
+
+-- you can also check if the logger is enabled if the value to print
+-- is expensive to get
+if dlog.is_enabled("logger1") then
+  logger1("Print some heavy string: %s", "heavy string")
+end
 ```
 
 You can create many named loggers, the logger name will be attached to all its
