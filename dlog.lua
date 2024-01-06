@@ -20,7 +20,7 @@ end
 ---Returns the logger object if the debuglog plugin installed, or a
 ---no-op function otherwise.
 ---@param logger_name string the name of the logger
----@return fun(msg: string): any logger function
+---@return fun(msg: string, ...): any logger function
 function M.logger(logger_name)
   if has_debuglog then
     return debuglog.logger_for_shim_only(logger_name)
