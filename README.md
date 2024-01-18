@@ -49,8 +49,8 @@ Note that all debug loggers must be created using the `dlog` shim module:
 -- Enable logging by running ":DebugLogEnable *" command first.
 
 local dlog = require("dlog")
-local logger1 = dlog("some_logger")
-local logger2 = dlog("another_logger")
+local logger1 = dlog.logger("some_logger")
+local logger2 = dlog.logger("another_logger")
 
 logger1("This is from %s", "some_logger")
 logger1("This is also from %s", "some_logger")
